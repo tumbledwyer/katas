@@ -52,11 +52,13 @@
     <Compile Include="Customer.cs" />
     <Compile Include="CustomerCapturer.cs" />
     <Compile Include="DataCleaner.cs" />
+    <Compile Include="DebugCapturer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serialiser.cs" />
     <Compile Include="TestCsvWriter.cs" />
     <Compile Include="TestCustomerCapturer.cs" />
     <Compile Include="TestDataCleaner.cs" />
+    <Compile Include="TestDebugCapturer.cs" />
     <Compile Include="TestSerialiser.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace IDNumberKata
@@ -10,7 +11,6 @@ namespace IDNumberKata
     [TestFixture]
     public class TestIdNumberValidator
     {
-        private readonly IdNumberValidator _idNumberValidator = new IdNumberValidator();
 
         [Test]
         public void ExtractIDParts_GivenIDNumberIn1900s_ShouldReturnDateOfBirthIn1900s()
@@ -18,9 +18,10 @@ namespace IDNumberKata
             //---------------Set up test pack-------------------
             const string idNumber = "9208155034085";
             const string expectedDate = "15-08-1992";
+            var idNumberValidator = Create();
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            var idParts = _idNumberValidator.ExtractIDParts(idNumber);
+            var idParts = idNumberValidator.ExtractIDParts(idNumber);
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedDate, idParts.DOB);
         }
@@ -31,9 +32,10 @@ namespace IDNumberKata
             //---------------Set up test pack-------------------
             const string idNumber = "0108155034085";
             const string expectedDate = "15-08-2001";
+            var idNumberValidator = Create();
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            var idParts = _idNumberValidator.ExtractIDParts(idNumber);
+            var idParts = idNumberValidator.ExtractIDParts(idNumber);
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedDate, idParts.DOB);
         }
@@ -44,9 +46,10 @@ namespace IDNumberKata
             //---------------Set up test pack-------------------
             const string idNumber = "0108153034085";
             const string expectedGender = "Female";
+            var idNumberValidator = Create();
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            var idParts = _idNumberValidator.ExtractIDParts(idNumber);
+            var idParts = idNumberValidator.ExtractIDParts(idNumber);
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedGender, idParts.Gender);
         }
@@ -57,9 +60,10 @@ namespace IDNumberKata
             //---------------Set up test pack-------------------
             const string idNumber = "0108156034085";
             const string expectedGender = "Male";
+            var idNumberValidator = Create();
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            var idParts = _idNumberValidator.ExtractIDParts(idNumber);
+            var idParts = idNumberValidator.ExtractIDParts(idNumber);
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedGender, idParts.Gender);
         }
@@ -70,9 +74,10 @@ namespace IDNumberKata
             //---------------Set up test pack-------------------
             const string idNumber = "0108156034085";
             const string expectedCitizenship = "SA";
+            var idNumberValidator = Create();
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            var idParts = _idNumberValidator.ExtractIDParts(idNumber);
+            var idParts = idNumberValidator.ExtractIDParts(idNumber);
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedCitizenship, idParts.Citizenship);
         }
@@ -83,13 +88,36 @@ namespace IDNumberKata
             //---------------Set up test pack-------------------
             const string idNumber = "0108156034185";
             const string expectedCitizenship = "Other";
+            var idNumberValidator = Create();
             //---------------Assert Precondition----------------
             //---------------Execute Test ----------------------
-            var idParts = _idNumberValidator.ExtractIDParts(idNumber);
+            var idParts = idNumberValidator.ExtractIDParts(idNumber);
             //---------------Test Result -----------------------
             Assert.AreEqual(expectedCitizenship, idParts.Citizenship);
         }
 
+        [Test]
+        public void ValidateID_GivenNumber_ShouldGetCheckSum()
+        {
+            //---------------Set up test pack-------------------
+            const string idNumber = "8503285167081";
+            var checkSumHelper = Substitute.For<ICheckSumHelper>();
+            var idNumberValidator = Create(checkSumHelper);
+            //---------------Assert Precondition----------------
+            //---------------Execute Test ----------------------
+            idNumberValidator.ValidateID(idNumber);
+            //---------------Test Result -----------------------
 
+            Assert.Fail("Test Not Yet Implemented");
+        }
+
+        private static IdNumberValidator Create(ICheckSumHelper checkSumHelper = null)
+        {
+            return new IdNumberValidator(checkSumHelper);
+        }
+    }
+
+    public interface ICheckSumHelper
+    {
     }
 }

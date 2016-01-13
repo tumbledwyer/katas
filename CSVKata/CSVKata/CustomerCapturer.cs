@@ -5,7 +5,12 @@ using System.Linq;
 
 namespace CSVKata
 {
-    public class CustomerCapturer
+    public interface ICustomerCapturer
+    {
+        void Capture(List<Customer> customers, string fileName, int batchSize);
+    }
+
+    public class CustomerCapturer : ICustomerCapturer
     {
         private readonly ICsvWriter _csvWriter;
         private readonly ISerialiser _serialiser;
@@ -23,11 +28,10 @@ namespace CSVKata
         public void Capture(List<Customer> customers, string fileName, int batchSize)
         {
             var uniqueEntries = _dataCleaner.RemoveDuplicates(customers);
-
             for(var i = 0; i < uniqueEntries.Count; i++)
             {
                 var fileNumber = (i/batchSize)+1;
-                _csvWriter.Save($"{fileName}.{fileNumber}", _serialiser.SerialiseCustomer(customers.ElementAt(i)));
+                _csvWriter.Save($"{fileName}.{fileNumber}", _serialiser.SerialiseCustomer(customers[i]));
             }
         }
     }

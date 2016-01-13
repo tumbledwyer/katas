@@ -2,6 +2,10 @@
 {
     public class IdNumberValidator
     {
+        public IdNumberValidator(ICheckSumHelper checkSumHelper)
+        {
+        }
+
         public IdParts ExtractIDParts(string idNumber)
         {
             return new IdParts
@@ -36,6 +40,11 @@
             var monthPart = idNumber.Substring(2, 2);
             var dayPart = idNumber.Substring(4, 2);
             return $"{dayPart}-{monthPart}-{century}{yearPart}";
+        }
+
+        public bool ValidateID(string idNumber)
+        {
+            throw new System.NotImplementedException();
         }
     }
 
